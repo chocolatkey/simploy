@@ -1,0 +1,7 @@
+*.json
+*.openssh
+*.pem
+*_rsa
+*_ecdsa
+*_ed25519
+config.*
