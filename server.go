@@ -118,8 +118,12 @@ func (s *SimployServer) postInfo(msg string) {
 	h := infohook{
 		Content: msg,
 	}
-	bin, _ := json.Marshal(h)
-	_, err := http.Post(s.infoHook, "application/json", bytes.NewBuffer(bin))
+	bin, err := json.Marshal(h)
+	if err != nil {
+		logrus.Error(errors.Wrap(err, "error marshalling JSON for webhook"))
+		return
+	}
+	_, err = http.Post(s.infoHook, "application/json", bytes.NewBuffer(bin))
 	if err != nil {
 		logrus.Error(errors.Wrap(err, "error posting to info webhook"))
 	}
