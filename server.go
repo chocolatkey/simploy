@@ -230,7 +230,7 @@ func (s *SimployServer) handlePush(event github.PushEvent) error {
 		// Merge simploy to current branch
 		output, err := client.Run(fmt.Sprintf("cd %s && git merge simploy", simployRepo.SSH.Directory))
 		if err != nil {
-			logrus.Error(err)
+			logrus.Error(errors.Wrapf(err, "merge failed: %s", output))
 			return
 		}
 		logrus.Debug("merge: " + string(output))
