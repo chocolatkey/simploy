@@ -258,7 +258,13 @@ func (s *SimployServer) handlePush(event github.PushEvent) error {
 			}
 		}
 
-		s.postInfo("finished deploying " + repo.GetFullName() + "@" + branch)
+		pusher := event.GetPusher()
+		var pusherText string
+		if pusher != nil {
+			pusherText = " (" + *pusher.Login + ")"
+		}
+
+		s.postInfo("finished deploying " + repo.GetFullName() + "@" + branch + pusherText)
 	}()
 
 	return nil
