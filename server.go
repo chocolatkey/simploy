@@ -153,8 +153,14 @@ func (s *SimployServer) handlePush(event github.PushEvent) error {
 		return nil
 	}
 
+	pusher := event.GetPusher()
+	var pusherText string
+	if pusher != nil {
+		pusherText = " (" + *pusher.Login + ")"
+	}
+
 	go func() {
-		s.postInfo("started deploying " + repo.GetFullName() + "@" + branch)
+		s.postInfo("started deploying " + repo.GetFullName() + "@" + branch + pusherText)
 
 		cloned, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{
 			URL:               simployRepo.URL,
@@ -256,12 +262,6 @@ func (s *SimployServer) handlePush(event github.PushEvent) error {
 				logrus.Error(err)
 				return
 			}
-		}
-
-		pusher := event.GetPusher()
-		var pusherText string
-		if pusher != nil {
-			pusherText = " (" + *pusher.Login + ")"
 		}
 
 		s.postInfo("finished deploying " + repo.GetFullName() + "@" + branch + pusherText)
