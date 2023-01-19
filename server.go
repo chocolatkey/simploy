@@ -118,6 +118,9 @@ func (s *SimployServer) postInfo(msg string) {
 	h := infohook{
 		Content: msg,
 	}
+	if len(h.Content) > 2000 { // Discord webhook limit
+		h.Content = h.Content[len(h.Content)-1997:len(h.Content)] + "..."
+	}
 	bin, err := json.Marshal(h)
 	if err != nil {
 		logrus.Error(errors.Wrap(err, "error marshalling JSON for webhook"))
