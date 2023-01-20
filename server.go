@@ -261,7 +261,11 @@ func (s *SimployServer) handlePush(event github.PushEvent) error {
 			)
 			logrus.Debug("output: " + string(output))
 			if err != nil {
-				s.postInfo("bad result from deployment script:\n```" + stripansi.Strip(string(output)) + "```")
+				content := stripansi.Strip(string(output))
+				if (len(content) + 42) > 2000 { // Discord webhook limit
+					content = "..." + content[len(content)-1997:]
+				}
+				s.postInfo("bad result from deployment script:\n```" + content + "```")
 				logrus.Error(err)
 				return
 			}
