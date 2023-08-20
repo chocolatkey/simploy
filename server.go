@@ -315,7 +315,7 @@ func (s *SimployServer) WebHook(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	default:
-		logrus.Errorf("unimplemented even type %", github.WebHookType(r))
+		logrus.Errorf("unimplemented event type %s", github.WebHookType(r))
 		w.WriteHeader(http.StatusNotImplemented)
 	}
 	w.WriteHeader(http.StatusOK)
