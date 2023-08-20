@@ -314,6 +314,10 @@ func (s *SimployServer) WebHook(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(err.Error()))
 			return
 		}
+	case *github.PingEvent:
+		logrus.Infof("received ping event for repo: %s", *ev.Zen)
+		w.WriteHeader(http.StatusNoContent)
+		return
 	default:
 		logrus.Errorf("unimplemented event type %s", github.WebHookType(r))
 		w.WriteHeader(http.StatusNotImplemented)
