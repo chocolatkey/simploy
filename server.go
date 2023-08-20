@@ -159,7 +159,13 @@ func (s *SimployServer) handlePush(event github.PushEvent) error {
 	pusher := event.GetPusher()
 	var pusherText string
 	if pusher != nil {
-		pusherText = " (" + *pusher.Login + ")"
+		if pusher.Login != nil {
+			pusherText = " (" + pusher.GetLogin() + ")"
+		} else if pusher.Name != nil {
+			pusherText = " (" + pusher.GetName() + ")"
+		} else if pusher.Email != nil {
+			pusherText = " (" + pusher.GetEmail() + ")"
+		}
 	}
 
 	go func() {
